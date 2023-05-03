@@ -18,9 +18,58 @@ class UsuarioService {
       });
       return novoUsuario;
     } catch (error) {
-        throw new Error("Erro ao cadastrar usuario");
+      throw new Error("Erro ao cadastrar usuario");
+    }
+  }
+
+  async buscarTodosUsuarios() {
+    const usuarios = await db.usuarios.findAll();
+    return usuarios;
+  }
+
+  async buscarUsuariosPorId(id) {
+    const usuario = await db.usuarios.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!usuario) {
+      throw new Error("Usuario não encontrado!");
+    }
+    return usuario;
+  }
+  async editarUsuario(dto) {
+    const usuario = await db.usuarios.findOne({
+      where: {
+        id: dto.id,
+      },
+    });
+
+    try {
+      usuario.nome = dto.nome;
+      usuario.email = dto.email;
+      await usuario.save();
+      return usuario;
+    } catch (error) {
+      throw new Error("Erro ao editar usuario!");
+    }
+  }
+  async deletarUsuario(id) {
+    const usuario = await db.usuarios.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!usuario) {
+      throw new Error("Usuario não encontrado!");
+    }
+    try {
+      await usuario.destroy();
+    } catch (error) {
+      throw new Error("Erro ao tentar deletar o usuario!");
     }
   }
 }
-
 module.exports = new UsuarioService();

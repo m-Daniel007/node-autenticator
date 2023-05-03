@@ -1,100 +1,100 @@
-const { v4: uuidv4 } = require('uuid')
-const database = require('../models')
+const { v4: uuidv4 } = require("uuid");
+const database = require("../models");
 
 class ProdutoService {
-    async cadastrarProduto(dto) {
-        const produto = await database.produtos.findOne({
-            where: {
-                nome: dto.nome
-            }
-        });
+  async cadastrarProduto(dto) {
+    const produto = await database.produtos.findOne({
+      where: {
+        nome: dto.nome,
+      },
+    });
 
-        if (produto) {
-            throw new Error('Produto já cadastrado');
-        }
-
-        try {
-            const newProduto = await database.produtos.create({ 
-                id: uuidv4(),
-                nome: dto.nome,
-                descricao: dto.descricao,
-                preco: dto.preco
-            });
-
-            return newProduto;
-        } catch (error) {
-            console.error('Message error: ', error.message);
-            throw error;
-        }
+    if (produto) {
+      throw new Error("Produto já cadastrado");
     }
 
-    async buscarTodosProdutos() {
-        const produtos = await database.produtos.findAll()
+    try {
+      const newProduto = await database.produtos.create({
+        id: uuidv4(),
+        nome: dto.nome,
+        descricao: dto.descricao,
+        preco: dto.preco,
+      });
 
-        return produtos;
+      return newProduto;
+    } catch (error) {
+      console.error("Message error: ", error.message);
+      throw error;
+    }
+  }
+
+  async buscarTodosProdutos() {
+    const produtos = await database.produtos.findAll();
+
+    return produtos;
+  }
+
+  async buscarProdutoPorId(id) {
+    const produto = await database.produtos.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!produto) {
+      throw new Error("Produto informado não cadastrado!");
     }
 
-    async buscarProdutoPorId(id) {
-        const produto = await database.produtos.findOne({
-            where: {
-                id: id
-            }
-        });
+    return produto;
+  }
 
-        if (!produto) {
-            throw new Error('Produto informado não cadastrado!')
-        }
+  async deletarProdutoPorId(id) {
+    const produto = await database.produtos.findOne({
+      where: {
+        id: id,
+      },
+    });
 
-        return produto;
+    if (!produto) {
+      throw new Error("Produto informado não cadastrado!");
     }
 
-    async deletarProdutoPorId(id) {
-        const produto = await database.produtos.findOne({
-            where: {
-                id: id
-            }
-        });
+    try {
+      await database.produtos.destroy({
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      console.error("Message error: ", error.message);
+      throw error;
+    }
+  }
 
-        if (!produto) {
-            throw new Error('Produto informado não cadastrado!')
-        }
+  async editarProduto(dto) {
+    const produto = await database.produtos.findOne({
+      where: {
+        id: dto.id,
+      },
+    });
 
-        try {
-            await database.produtos.destroy({
-                where: {
-                    id: id
-                }
-            });
-        } catch (error) {
-            console.error('Message error: ', error.message)
-            throw error;
-        }
+    if (!produto) {
+      throw new Error("Produto informado não cadastrado!");
     }
 
-    async editarProduto(dto) {
-        const produto = await database.produtos.findOne({
-            where: {
-                id: dto.id
-            }
-        });
+    try {
+      produto.nome = dto.nome;
+      produto.descricao = dto.descricao;
+      produto.preco = dto.preco;
 
-        if (!produto) {
-            throw new Error('Produto informado não cadastrado!')
-        }
+      await produto.save();
 
-        try {
-            produto.nome = dto.nome
-            produto.descricao = dto.descricao
-            produto.preco = dto.preco
-
-            await produto.save()
-
-            return await produto.reload()
-        } catch (error) {
-            console.error('Message error: ', error.message)
-            throw error
-        }
+      return await produto.reload();
+    } catch (error) {
+      console.error("Message error: ", error.message);
+      throw error;
     }
+  }
 }
 
-module.exports = ProdutoService
+module.exports = ProdutoService;
