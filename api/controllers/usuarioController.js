@@ -16,6 +16,7 @@ class UsuarioController {
   static async buscarTodosUsuarios(req, res) {
     try {
       const usuarios = await usuarioService.buscarTodosUsuarios();
+
       res.status(200).json(usuarios);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -32,14 +33,13 @@ class UsuarioController {
   }
   static async editarUsuario(req, res) {
     const { id } = req.params;
-    const { nome, email,  } = req.body;
-    
+    const { nome, email } = req.body;
+
     try {
       const usuario = await usuarioService.editarUsuario({
         id,
         nome,
         email,
-     
       });
       res.status(200).json(usuario);
     } catch (error) {

@@ -6,31 +6,34 @@ const jsonSecret = require("../config/jsonSecret");
 class AuthService {
   async login(dto) {
     const usuario = await db.usuarios.findOne({
-      atrributes: ["id", "email", "senha"],
+      attributes: ["id", "email", "senha"],
       where: {
         email: dto.email,
       },
     });
-    if (!usuario) {
-      throw new Error("Usuário não encontrado !");
-    }
-    const senhasIguais = await compare(dto.senha, usuario.senha);
 
-    if (!senhasIguais) {
-      throw new Error("Usuário ou senha incorretos !");
+    if (!usuario) {
+      throw new Error("Usuario não cadastrado");
     }
-    
-    const token = sign(
+
+    const senhaIguais = await compare(dto.senha, usuario.senha);
+
+    if (!senhaIguais) {
+      throw new Error("Usuario ou senha invalido");
+    }
+
+    const accessToken = sign(
       {
         id: usuario.id,
         email: usuario.email,
       },
       jsonSecret.secret,
       {
-        expiresIn: 300,
+        expiresIn: '1h',
       }
     );
-    return {message:'Você está logado !', token };
+
+    return { message: ` Você está logado, ${usuario.email} `, accessToken };
   }
 }
 
