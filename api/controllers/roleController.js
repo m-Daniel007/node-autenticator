@@ -28,7 +28,7 @@ class RoleController {
       const role = await roleService.buscarRolePorId(id);
       res.status(200).json(role);
     } catch (error) {
-      console.log("Message error: ", error.message);
+      
       res.status(400).send({ message: error.message });
     }
   }
@@ -39,7 +39,7 @@ class RoleController {
       const role = await roleService.editarRole({ id, nome, descricao });
       res.status(200).json(role);
     } catch (error) {
-      console.log("Message error: ", error.message);
+      
       res.status(400).send({ message: error.message });
     }
   }
@@ -49,7 +49,7 @@ class RoleController {
       await roleService.deletarRolePorId(id);
       res.status(200).send({ message: "Role deletada com sucesso!" });
     } catch (error) {
-      console.log("Message error: ", error.message);
+     
       res.status(400).send({ message: error.message });
     }
   }
