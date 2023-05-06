@@ -28,11 +28,7 @@ class UsuarioService {
   }
 
   async buscarUsuariosPorId(id) {
-    const usuario = await db.usuarios.findOne({
-      where: {
-        id: id,
-      },
-    });
+    const usuario = await db.usuarios.findByPk(id);
 
     if (!usuario) {
       throw new Error("Usuario não encontrado!");

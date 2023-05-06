@@ -28,11 +28,11 @@ class AuthService {
         email: usuario.email,
       },
       jsonSecret.secret,
+
       {
-        expiresIn: '1h',
+        expiresIn: "2m",
       }
     );
-
     return { message: ` Você está logado, ${usuario.email} `, accessToken };
   }
 }

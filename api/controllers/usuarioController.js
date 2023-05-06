@@ -26,14 +26,14 @@ class UsuarioController {
     const { id } = req.params;
     try {
       const usuario = await usuarioService.buscarUsuariosPorId(id);
-      res.status(200).json(usuario);
+      return res.status(200).json(usuario);
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      return res.status(400).json({ message: error.message });
     }
   }
   static async editarUsuario(req, res) {
     const { id } = req.params;
-    const { nome, email } = req.body;
+    const { nome, email} = req.body;
 
     try {
       const usuario = await usuarioService.editarUsuario({
@@ -41,18 +41,18 @@ class UsuarioController {
         nome,
         email,
       });
-      res.status(200).json(usuario);
+      return res.status(200).json(usuario);
     } catch (error) {
-      res.status(400).send({ message: error.message });
+      return res.status(400).send({ message: error.message });
     }
   }
   static async deletarUsuario(req, res) {
     const { id } = req.params;
     try {
       await usuarioService.deletarUsuario(id);
-      res.status(200).send({ message: "Usuario deletado com sucesso!" });
+      return res.status(200).send({ message: "Usuario deletado com sucesso!" });
     } catch (error) {
-      res.status(400).send({ message: error.message });
+      return res.status(400).send({ message: error.message });
     }
   }
 }
