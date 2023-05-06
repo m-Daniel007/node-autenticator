@@ -1,4 +1,4 @@
-const { verify, decode } = require("jsonwebtoken");
+const { verify } = require("jsonwebtoken");
 const jsonSecret = require("../config/jsonSecret");
 
 module.exports = async (req, res, next) => {
@@ -11,11 +11,11 @@ module.exports = async (req, res, next) => {
 
   console.log("DATA ATUAL em ms ", Math.floor(Date.now() / 1000));
   try {
-    const decoded = await decode(token, jsonSecret.secret);
+    const decoded = await verify(token, jsonSecret.secret);
 
     console.log("expira em: ", decoded.exp, "criado em: ", decoded.iat);
 
-    if (decoded.exp < (Date.now() / 1000)) {
+    if (decoded.exp < Date.now() / 1000) {
       return res.status(401).json("Token expirado!");
     }
 
@@ -24,6 +24,8 @@ module.exports = async (req, res, next) => {
 
     return next();
   } catch (error) {
-    return res.status(401).json("Token inválido!");
+    if (error.message === "jwt expired") {
+      return res.status(401).json("Token expirado!");
+    }
   }
 };

@@ -30,7 +30,7 @@ class AuthService {
       jsonSecret.secret,
 
       {
-        expiresIn: "2m",
+        expiresIn: "15m",
       }
     );
     return { message: ` Você está logado, ${usuario.email} `, accessToken };
