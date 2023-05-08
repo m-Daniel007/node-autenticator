@@ -5,15 +5,17 @@ const usuario = require("./usuarioRoute");
 const auth = require("./authRoute");
 const roles = require("./rolesRoute");
 const permissao = require("./permissaoRoute");
+const seguranca = require("./segurancaRoute");
 
 module.exports = (app) => {
   app.use(
-    morgan("dev"),
     express.json(),
+    morgan("dev"),
     auth,
     usuario,
     produto,
     roles,
-    permissao
+    permissao,
+    seguranca
   );
 };
