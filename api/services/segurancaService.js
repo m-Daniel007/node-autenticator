@@ -66,6 +66,44 @@ class SegurancaService {
     });
     return novoUsuario;
   }
+
+  async cadastrarPermissoesRoles(dto) {
+    const role = await db.roles.findOne({
+      include: [
+        {
+          model: db.permissoes,
+          as: "roles_permissoes",
+          attributes: ["id", "nome", "descricao"],
+        },
+      ],
+    });
+    if (!role) {
+      throw new Error("Role não cadastrada!");
+    }
+    const permissoesCadastradas = await db.permissoes.findAll({
+      where: {
+        id: {
+          [Sequelize.Op.in]: dto.permissoes,
+        },
+      },
+    });
+    await role.removeRoles_permissoes(role.roles_permissoes);
+    await role.addRoles_permissoes(permissoesCadastradas);
+
+    const novaRole = await db.roles.findOne({
+      include: [
+        {
+          model: db.permissoes,
+          as: "roles_permissoes",
+          attributes: ["id", "nome", "descricao"],
+        },
+      ],
+      where: {
+        id: dto.roleId,
+      },
+    });
+    return novaRole;
+  }
 }
 
 module.exports = new SegurancaService();
