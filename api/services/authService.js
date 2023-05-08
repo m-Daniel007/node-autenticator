@@ -24,13 +24,13 @@ class AuthService {
 
     const accessToken = sign(
       {
-        id: usuario.id,
         email: usuario.email,
       },
       jsonSecret.secret,
 
       {
-        expiresIn: "15m",
+        expiresIn: "1d",
+        subject: usuario.id.toString(),
       }
     );
     return { message: ` Você está logado, ${usuario.email} `, accessToken };

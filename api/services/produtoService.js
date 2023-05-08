@@ -1,9 +1,9 @@
 const { v4: uuidv4 } = require("uuid");
-const database = require("../models");
+const db = require("../models");
 
 class ProdutoService {
   async cadastrarProduto(dto) {
-    const produto = await database.produtos.findOne({
+    const produto = await db.produtos.findOne({
       where: {
         nome: dto.nome,
       },
@@ -14,7 +14,7 @@ class ProdutoService {
     }
 
     try {
-      const newProduto = await database.produtos.create({
+      const newProduto = await db.produtos.create({
         id: uuidv4(),
         nome: dto.nome,
         descricao: dto.descricao,
@@ -29,13 +29,13 @@ class ProdutoService {
   }
 
   async buscarTodosProdutos() {
-    const produtos = await database.produtos.findAll();
+    const produtos = await db.produtos.findAll();
 
     return produtos;
   }
 
   async buscarProdutoPorId(id) {
-    const produto = await database.produtos.findOne({
+    const produto = await db.produtos.findOne({
       where: {
         id: id,
       },
@@ -49,7 +49,7 @@ class ProdutoService {
   }
 
   async deletarProdutoPorId(id) {
-    const produto = await database.produtos.findOne({
+    const produto = await db.produtos.findOne({
       where: {
         id: id,
       },
@@ -60,7 +60,7 @@ class ProdutoService {
     }
 
     try {
-      await database.produtos.destroy({
+      await db.produtos.destroy({
         where: {
           id: id,
         },
@@ -72,7 +72,7 @@ class ProdutoService {
   }
 
   async editarProduto(dto) {
-    const produto = await database.produtos.findOne({
+    const produto = await db.produtos.findOne({
       where: {
         id: dto.id,
       },

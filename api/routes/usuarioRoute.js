@@ -1,13 +1,13 @@
 const { Router } = require("express");
 const router = Router();
 const UsuarioController = require("../controllers/usuarioController.js");
-const autenticado = require("../midleware/autenticado.js");
-
+const autenticado = require("../middlewares/autenticado.js");
 
 router
   .post("/usuarios", UsuarioController.cadastrar)
   .use(autenticado)
-  .get("/usuarios",  UsuarioController.buscarTodosUsuarios)
+  .post("/usuarios/me", UsuarioController.verificaUsuario)
+  .get("/usuarios", UsuarioController.buscarTodosUsuarios)
   .get("/usuarios/:id", UsuarioController.buscarUsuariosPorId)
   .put("/usuarios/:id", UsuarioController.editarUsuario)
   .delete("/usuarios/:id", UsuarioController.deletarUsuario);

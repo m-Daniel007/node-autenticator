@@ -1,3 +1,4 @@
+const autenticado = require("../middlewares/autenticado.js");
 const usuarioService = require("../services/usuarioService.js");
 
 class UsuarioController {
@@ -10,6 +11,19 @@ class UsuarioController {
       res.status(201).json(usuario);
     } catch (error) {
       res.status(400).json({ message: error.message });
+    }
+  }
+  static async verificaUsuario(req, res) {
+    const { usuarioId } = req;
+   
+    try {
+      const resultado = await usuarioService.verificaUsuario(usuarioId);
+      if(resultado instanceof Error){
+        return res.status(400).json({ message: resultado.message });
+      }
+      return res.json(resultado);
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
     }
   }
 
@@ -33,7 +47,7 @@ class UsuarioController {
   }
   static async editarUsuario(req, res) {
     const { id } = req.params;
-    const { nome, email} = req.body;
+    const { nome, email } = req.body;
 
     try {
       const usuario = await usuarioService.editarUsuario({

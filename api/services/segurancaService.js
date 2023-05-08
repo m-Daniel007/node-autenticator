@@ -1,5 +1,6 @@
 const db = require("../models");
 const Sequelize = require("sequelize");
+const uuid = require("uuid");
 
 class SegurancaService {
   async cadastrarAcl(dto) {

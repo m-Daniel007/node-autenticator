@@ -21,18 +21,71 @@ class UsuarioService {
       throw new Error("Erro ao cadastrar usuario");
     }
   }
+  async verificaUsuario(UsuarioId) {
+    const usuario = await db.usuarios.findOne({
+      where: {
+        id: UsuarioId,
+      },
+    });
+    if (!usuario) {
+      throw new Error("Usuario não encontrado!");
+    }
+    return usuario;
+  }
 
   async buscarTodosUsuarios() {
-    const usuarios = await db.usuarios.findAll();
+    const usuarios = await db.usuarios.findAll({
+      include: [
+        {
+          model: db.roles,
+          as: "usuarios_role",
+          attributes: ["id", "nome", "descricao"],
+          through: {
+            attributes: [],
+          },
+        },
+        {
+          model: db.permissoes,
+          as: "usuarios_permissao",
+          attributes: ["id", "nome", "descricao"],
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+    });
     return usuarios;
   }
 
   async buscarUsuariosPorId(id) {
-    const usuario = await db.usuarios.findByPk(id);
+    const usuario = await db.usuarios.findOne({
+      include: [
+        {
+          model: db.roles,
+          as: "usuarios_role",
+          attributes: ["id", "nome", "descricao"],
+          through: {
+            attributes: [],
+          },
+        },
+        {
+          model: db.permissoes,
+          as: "usuarios_permissao",
+          attributes: ["id", "nome", "descricao"],
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+      where: {
+        id: id,
+      },
+    });
 
     if (!usuario) {
-      throw new Error("Usuario não encontrado!");
+      throw new Error("Usuario informado não cadastrado!");
     }
+
     return usuario;
   }
   async editarUsuario(dto) {
