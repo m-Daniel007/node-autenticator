@@ -8,8 +8,10 @@ class AuthController {
 
     try {
       const login = await authService.login({ email, senha });
+      const token = login.accessToken;
 
-      res.status(200).json(login);
+      res.set("Authorization", token);
+      res.status(200).json({ message: login });
     } catch (error) {
       res.status(401).send({ message: error.message });
     }

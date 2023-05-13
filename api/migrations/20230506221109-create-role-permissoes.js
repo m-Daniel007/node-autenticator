@@ -8,7 +8,6 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
         type: Sequelize.INTEGER,
-      
       },
       role_id: {
         type: Sequelize.UUID,
@@ -28,7 +27,7 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

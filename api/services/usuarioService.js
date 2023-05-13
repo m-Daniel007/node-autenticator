@@ -26,6 +26,7 @@ class UsuarioService {
       where: {
         id: UsuarioId,
       },
+      attributes: ["id", "nome", "createdAt", "updatedAt"],
     });
     if (!usuario) {
       throw new Error("Usuario não encontrado!");

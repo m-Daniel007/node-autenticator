@@ -6,7 +6,7 @@ const jsonSecret = require("../config/jsonSecret");
 class AuthService {
   async login(dto) {
     const usuario = await db.usuarios.findOne({
-      attributes: ["id", "email", "senha"],
+      attributes: ["id", "email", "senha", "nome"],
       where: {
         email: dto.email,
       },
@@ -22,18 +22,19 @@ class AuthService {
       throw new Error("Usuario ou senha invalido");
     }
 
+    const { secret, expiresIn } = jsonSecret;
     const accessToken = sign(
       {
         email: usuario.email,
       },
-      jsonSecret.secret,
+      secret,
 
       {
-        expiresIn: "1d",
+        expiresIn: expiresIn,
         subject: usuario.id.toString(),
       }
     );
-    return { message: ` Você está logado, ${usuario.email} `, accessToken };
+    return { message: ` Você está logado, ${usuario.nome} `, accessToken };
   }
 }
 
